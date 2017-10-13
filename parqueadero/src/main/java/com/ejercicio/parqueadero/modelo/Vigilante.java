@@ -4,35 +4,39 @@ package com.ejercicio.parqueadero.modelo;
 import com.ejercicio.parqueadero.repositorio.IParqueadero;
 import com.ejercicio.parqueadero.repositorio.IRegistro;
 
+
 public class Vigilante {
 
 	public static final String NO_HAY_CUPO_DISPONIBLE = "No hay cupo disponible para {0}";
 	
 	private IParqueadero parqueadero;
-	private IRegistro registroCarros;
+	private IRegistro registroVehiculos;
 	
 
 	public Vigilante(IParqueadero parqueadero, IRegistro registro) {
 		this.parqueadero = parqueadero;
-		this.registroCarros = registro;
+		this.registroVehiculos = registro;
 	}
 
 	
-	public void asignarCupoVehiculo(String placa){
+	public boolean asignarCupoVehiculo(Vehiculo vehiculo){
 		
-	
+		parqueadero.agregarVehiculo(vehiculo);
+		Registro registro = new Registro(vehiculo);  
+		registroVehiculos.agregar(registro);
+		return true;
 	}
 	
-	public void retirarCupoVehiculo(String placa){
+	public boolean retirarCupoVehiculo(String placa){
 		
 	
-		
+		return true;
 	}
 	
-	public void calcularCosto(String placa){
+	public double calcularCosto(String placa){
 		
 	
-		
+		return 0;
 	}
 	
 	public boolean validarPlaca(String placa){
@@ -40,7 +44,7 @@ public class Vigilante {
 		return true;
 	}
 	
-	public boolean validarCcMoto(){
+	public boolean validarCcMoto(String placa){
 		
 		return true;
 	}

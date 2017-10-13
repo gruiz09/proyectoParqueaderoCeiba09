@@ -24,6 +24,10 @@ public class Registro implements IRegistro {
 		this.hora_salida = hora_salida;
 		this.vehiculo = vehiculo;
 	}
+	
+	public Registro (Vehiculo vehiculo){
+		this.vehiculo = vehiculo;
+	}
 
 	public String getId() {
 		return id;
