@@ -1,6 +1,7 @@
 package domio.unitaria;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,13 +18,15 @@ import org.junit.Test;
 
 public class VigilanteTest {
 	
+	
+	
 	@Test
 	public void validarPlaca(){
 		
 		//arrange
 		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
 		
-		Vehiculo vehiculo = vehiculoTestDataBuilder.build();  
+		Vehiculo vehiculo = vehiculoTestDataBuilder.conPlaca("TFD435").build();  
 		
 		Parqueadero parqueadero = mock(Parqueadero.class);
 		Registro registro = mock(Registro.class);
@@ -35,6 +38,28 @@ public class VigilanteTest {
 		
 		//assert
 		assertTrue(placaValida);
+		
+	}
+	
+	@Test
+	public void validarPlacaInvalida(){
+		
+		//arrange
+		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		
+		Vehiculo vehiculo = vehiculoTestDataBuilder.conPlaca("ACR456").build();  
+		
+		Parqueadero parqueadero = mock(Parqueadero.class);
+		Registro registro = mock(Registro.class);
+		
+		Vigilante vigilante = new Vigilante(parqueadero, registro);
+		
+		
+		//act
+		boolean placaInvalida = vigilante.validarPlaca(vehiculo.getPlaca());
+		
+		//assert
+		assertFalse(placaInvalida);
 		
 	}
 	
