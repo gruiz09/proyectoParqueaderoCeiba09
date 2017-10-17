@@ -21,7 +21,7 @@ public class repositorioRegistro implements IRegistro {
 
 	@Override
 	public Registro obtener(String placa) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

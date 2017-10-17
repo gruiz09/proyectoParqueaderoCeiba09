@@ -2,16 +2,29 @@ package persistencia.entidad;
 
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.ejercicio.parqueadero.modelo.Vehiculo;
 
+@Document(collection = "Registro")
 public class RegistroEntity {
 	
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
+		@Id
 		private String id;
 		private Date fecha_ingreso;
 		private Date fecha_salida;
-		private int hora_ingreso;
-		private int hora_salida;
-		private Vehiculo vehiculo;
+		private double valor;
+
+		
+		//@CascadeSave
+		@DBRef
+		private VehiculoEntity vehiculo;
 
 		public String getId() {
 			return id;
@@ -36,28 +49,20 @@ public class RegistroEntity {
 		public void setFecha_salida(Date fecha_salida) {
 			this.fecha_salida = fecha_salida;
 		}
-
-		public int getHora_ingreso() {
-			return hora_ingreso;
+		
+		public double getValor() {
+			return valor;
 		}
 
-		public void setHora_ingreso(int hora_ingreso) {
-			this.hora_ingreso = hora_ingreso;
+		public void setValor(double valor) {
+			this.valor = valor;
 		}
 
-		public int getHora_salida() {
-			return hora_salida;
-		}
-
-		public void setHora_salida(int hora_salida) {
-			this.hora_salida = hora_salida;
-		}
-
-		public Vehiculo getVehiculo() {
+		public VehiculoEntity getVehiculo() {
 			return vehiculo;
 		}
 
-		public void setVehiculo(Vehiculo vehiculo) {
+		public void setVehiculo(VehiculoEntity vehiculo) {
 			this.vehiculo = vehiculo;
 		}
 	

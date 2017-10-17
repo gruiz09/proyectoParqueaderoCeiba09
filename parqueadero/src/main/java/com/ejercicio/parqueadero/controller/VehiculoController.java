@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ejercicio.parqueadero.modelo.Vigilante;
+
 import org.springframework.http.MediaType;
 
 import persistencia.entidad.VehiculoEntity;
@@ -23,6 +26,7 @@ public class VehiculoController {
 		return "test";
 	}
 	
+	
 	@Autowired
 	@Qualifier("vehiculoJpaRepository")
 	VehiculoRepository vehiculoRepository;
@@ -30,24 +34,29 @@ public class VehiculoController {
 	//create
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@RequestBody VehiculoEntity vehiculo){
+		System.out.println("Entra a esta peticion Save");
+		
 		vehiculoRepository.save(vehiculo);
 	}
 	
 	//read
 	@RequestMapping(value = "/{placa}")
 	public VehiculoEntity read(@PathVariable String placa){
+		System.out.println("Entra a esta peticion Read");
 		return vehiculoRepository.findOne(placa);
 	}
 	
 	//update
 	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void update(VehiculoEntity vehiculo){
+	public void update(@RequestBody VehiculoEntity vehiculo){
+		System.out.println("Entra a esta peticion Update");
 		vehiculoRepository.save(vehiculo);		
 	}
 	
 	//delete
 	@RequestMapping(value = "/{placa}", method = RequestMethod.DELETE)
-	public void delete(String placa){
+	public void delete(@PathVariable String placa){
+		System.out.println("Entra a esta peticion Delete");
 		vehiculoRepository.delete(placa);
 	}
 	

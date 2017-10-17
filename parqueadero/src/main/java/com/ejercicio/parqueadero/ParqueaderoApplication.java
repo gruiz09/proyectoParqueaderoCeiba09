@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"com.ejercicio.parqueadero"})
 @ComponentScan ({"com.ejercicio.parqueadero"})
 @EnableMongoRepositories ("persistencia.repositorio") // this fix the problem
 public class ParqueaderoApplication {

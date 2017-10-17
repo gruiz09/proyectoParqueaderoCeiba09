@@ -10,6 +10,8 @@ import com.ejercicio.parqueadero.modelo.Registro;
 import com.ejercicio.parqueadero.modelo.Vehiculo;
 import com.ejercicio.parqueadero.modelo.Vigilante;
 
+import persistencia.entidad.RegistroEntity;
+import persistencia.entidad.VehiculoEntity;
 import persistencia.repositorio.Parqueadero;
 import testdatabuilder.VehiculoTestDataBuilder;
 
@@ -28,10 +30,10 @@ public class VigilanteTest {
 		
 		Vehiculo vehiculo = vehiculoTestDataBuilder.conPlaca("TFD435").build();  
 		
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		Registro registro = mock(Registro.class);
+		//Parqueadero parqueadero = mock(Parqueadero.class);
+		//Registro registro = mock(Registro.class);
 		
-		Vigilante vigilante = new Vigilante(parqueadero, registro);
+		Vigilante vigilante = new Vigilante();
 		
 		//act
 		boolean placaValida = vigilante.validarPlaca(vehiculo.getPlaca());
@@ -49,10 +51,10 @@ public class VigilanteTest {
 		
 		Vehiculo vehiculo = vehiculoTestDataBuilder.conPlaca("ACR456").build();  
 		
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		Registro registro = mock(Registro.class);
+		//Parqueadero parqueadero = mock(Parqueadero.class);
+		//Registro registro = mock(Registro.class);
 		
-		Vigilante vigilante = new Vigilante(parqueadero, registro);
+		Vigilante vigilante = new Vigilante();
 		
 		
 		//act
@@ -62,27 +64,7 @@ public class VigilanteTest {
 		assertFalse(placaInvalida);
 		
 	}
-	
-	@Test
-	public void validarCcMoto(){
-		
-		//arrange
-		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
-		
-		Vehiculo vehiculo = vehiculoTestDataBuilder.conPlaca("SDG456").build();  
-		
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		Registro registro = mock(Registro.class);
-		
-		Vigilante vigilante = new Vigilante(parqueadero, registro);
-		
-		//act
-		boolean motoValida = vigilante.validarCcMoto(vehiculo.getPlaca());
-		
-		//assert
-		assertTrue(motoValida);
-		
-	}
+
 
 	@Test
 	public void asignarCupoVehiculo(){
@@ -93,11 +75,11 @@ public class VigilanteTest {
 				conCC(2300).conColor("azul").build();
 		
 		Parqueadero parqueadero = mock(Parqueadero.class);
-		Registro registro = mock(Registro.class);
+		//Registro registro = mock(Registro.class);
 
 		when(parqueadero.validarCupoLibre()).thenReturn(true);
 		
-		Vigilante vigilante = new Vigilante(parqueadero,registro);
+		Vigilante vigilante = new Vigilante();
 				
 		//act
 		boolean asignado = vigilante.asignarCupoVehiculo(vehiculo);
@@ -113,10 +95,10 @@ public class VigilanteTest {
 		//arrange			
 		Vehiculo vehiculo = new VehiculoTestDataBuilder().conPlaca("ASA534").build();
 		
-		Parqueadero parqueadero = mock(Parqueadero.class);
+		//Parqueadero parqueadero = mock(Parqueadero.class);
 		Registro registro = mock(Registro.class);
 			
-		Vigilante vigilante = new Vigilante(parqueadero, registro);
+		Vigilante vigilante = new Vigilante();
 							
 		//act
 		boolean retirado = vigilante.retirarCupoVehiculo(vehiculo.getPlaca());
@@ -131,19 +113,19 @@ public class VigilanteTest {
 	public void calcularCosto(){
 		
 		//arrange
-		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		//VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
 				
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		Registro registro = mock(Registro.class);
+		//Parqueadero parqueadero = mock(Parqueadero.class);
+		RegistroEntity registro = mock(RegistroEntity.class);
 		
-		Vehiculo vehiculo = vehiculoTestDataBuilder.build();  
+		//Vehiculo vehiculo = vehiculoTestDataBuilder.build();  
 				
-		Vigilante vigilante = new Vigilante(parqueadero, registro);
+		Vigilante vigilante = new Vigilante();
 					
-		when(registro.obtener(vehiculo.getPlaca())).thenReturn(registro);
+		//when(registro.obtener(vehiculo.getPlaca())).thenReturn(registro);
 
 		//act
-		double valor =vigilante.calcularCosto(vehiculo.getPlaca());
+		double valor =vigilante.calcularCosto(registro);
 		
 		//assert
 		assertThat(valor);
