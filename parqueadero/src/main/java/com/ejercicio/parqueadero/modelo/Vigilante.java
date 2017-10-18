@@ -4,14 +4,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.ejercicio.parqueadero.repositorio.IParqueadero;
-import com.ejercicio.parqueadero.repositorio.IRegistro;
+
 
 import persistencia.entidad.RegistroEntity;
 import persistencia.entidad.VehiculoEntity;
+import persistencia.repositorio.Parqueadero;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 public class Vigilante {
@@ -20,34 +19,40 @@ public class Vigilante {
 
 	DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
     DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+    
+    Parqueadero parqueadero;
 
 
 	public Vigilante() {
-
-	}
-
-	public boolean asignarCupoVehiculo(Vehiculo vehiculo) {
-
 		
+	}
+
+	public boolean asignarCupoVehiculo(Parqueadero parqueadero, String tipo_vehiculo) {
+
+		return parqueadero.agregarVehiculo(parqueadero,tipo_vehiculo);
 		
-		return true;
 	}
 
-	public boolean retirarCupoVehiculo(String placa) {
-
-		return true;
+	public boolean retirarCupoVehiculo(Parqueadero parqueadero, String tipo_vehiculo) {
+		
+		return parqueadero.retirarVehiculo(parqueadero, tipo_vehiculo);
+		
 	}
+	
+	public boolean validarCupoLibre(Parqueadero parqueadero, String tipo_vehiculo) {
+		
+		return parqueadero.validarCupoLibre(parqueadero,tipo_vehiculo);
 
-	public double calcularCosto(RegistroEntity registro) {
+	}
+	
 
-		Date fechaSalida = new Date();
-        //Date fechaIngreso = registro.getFecha_ingreso(); arreglar
+	public double calcularCosto(RegistroEntity registro, String tipo_vehiculo) {
+
+		System.out.println("entra a calcular costo");
+		Date fechaSalida = new Date("10/19/2017 18:00:25"); //rectificar y usar fechas reales
 		Date fechaIngreso = new Date();
-		
-        //formatoHora.format(registro.getFecha_ingreso()+" de fecha: "+formatoFecha.format(registro.getFecha_ingreso()));
-
-      //  formatoHora.format(registro.getFecha_ingreso()+" de fecha: "+formatoFecha.format(registro.getFecha_ingreso()));
-
+		//Date fechaIngreso = registro.getFecha_ingreso();
+	
         long diferenciaFechas = fechaSalida.getTime() - fechaIngreso.getTime();
         long dias = diferenciaFechas / (1000 * 60 * 60 * 24);
        
@@ -57,16 +62,36 @@ public class Vigilante {
         int horas = Integer.parseInt(hora_min_ingreso[0]) - Integer.parseInt(hora_min_salida[0]);
         int minutos = Integer.parseInt(hora_min_ingreso[1]) - Integer.parseInt(hora_min_salida[1]);
 
-		double valor = determinarCostoTotal(dias, horas, minutos);
+		double valor = determinarCostoTotal(tipo_vehiculo, dias, horas, minutos);
 		
 		return valor;
 	}
 	
-	public double determinarCostoTotal(long dias, int horas, int minutos) {
+	public double determinarCostoTotal(String tipo_vehiculo, long dias, int horas, int minutos) {
 
+		System.out.println("entra a determinar costo toal");
+
+		System.out.println("dias " + dias + ", horas " + horas + ", minutos "+ minutos);
 		
+		double total = 0;	
 		
-		return 52000;
+		if(tipo_vehiculo.equals("carro")){
+			
+			if (minutos>30)
+				horas++;
+			
+			total = (dias * 8000) + (horas * 1000);  
+			
+		}else{
+			
+			if (minutos>30)
+				horas++;
+			
+			total = (dias * 600) + (horas * 500);
+			
+		}
+		
+		return total;
 	}
 	
 	
@@ -87,11 +112,13 @@ public class Vigilante {
 	}
 
 	public double validarCc(VehiculoEntity vehiculo) {
-		
-		if (Integer.parseInt(vehiculo.getCc()) > 500){
-			return 2000;
+		System.out.println("valida vehiculo");
+		if(vehiculo.getTipo_vehiculo().equals("moto")){
+			if (Integer.parseInt(vehiculo.getCc()) > 500){
+				return 2000;
+			}
 		}
-
+		
 		return 0;
 	}
 

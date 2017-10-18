@@ -11,8 +11,10 @@ import persistencia.entidad.RegistroEntity;;
 public interface RegistroRepository extends MongoRepository <RegistroEntity, String> {
 	
 		public RegistroEntity findById(String id);
-		public List<RegistroEntity> findByIdOrderById(String id);
+		public List<RegistroEntity> findById();
 		public RegistroEntity findByVehiculoPlaca(String placa);
+	    
+
 		
 		
 }

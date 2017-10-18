@@ -15,14 +15,15 @@ public class VehiculoEntity {
 	//Base Vehiculo
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
-	private String id; 
+	private String id;
+	private String tipo_vehiculo;
 	private String placa;
 	private String color;
 	private String cc;
 	//Especificacion Moto
-	private int tipo_encendido;
+	private String tipo_encendido;
 	//Especificacion Carro
-	private int numero_puertas;
+	private String numero_puertas;
 	private String tipo_carro;
 
 	
@@ -50,19 +51,19 @@ public class VehiculoEntity {
 		this.color = color;
 	}
 
-	public int getTipo_encendido() {
+	public String getTipo_encendido() {
 		return tipo_encendido;
 	}
 
-	public void setTipo_encendido(int tipo_encendido) {
+	public void setTipo_encendido(String tipo_encendido) {
 		this.tipo_encendido = tipo_encendido;
 	}
 
-	public int getNumero_puertas() {
+	public String getNumero_puertas() {
 		return numero_puertas;
 	}
 
-	public void setNumero_puertas(int numero_puertas) {
+	public void setNumero_puertas(String numero_puertas) {
 		this.numero_puertas = numero_puertas;
 	}
 
@@ -82,16 +83,21 @@ public class VehiculoEntity {
 		this.cc = cc;
 	}
 
-	@Override
-	public String toString() {
-		return "VehiculoEntity [id=" + id + ", placa=" + placa + ", color=" + color + ", cc=" + cc + ", tipo_encendido="
-				+ tipo_encendido + ", numero_puertas=" + numero_puertas + ", tipo_carro=" + tipo_carro + "]";
+	public String getTipo_vehiculo() {
+		return tipo_vehiculo;
 	}
 
+	public void setTipo_vehiculo(String tipo_vehiculo) {
+		this.tipo_vehiculo = tipo_vehiculo;
+	}
 
-	
+	@Override
+	public String toString() {
+		return "VehiculoEntity [id=" + id + ", tipo_vehiculo=" + tipo_vehiculo + ", placa=" + placa + ", color=" + color
+				+ ", cc=" + cc + ", tipo_encendido=" + tipo_encendido + ", numero_puertas=" + numero_puertas
+				+ ", tipo_carro=" + tipo_carro + "]";
+	}
 
-	
 
 
 }

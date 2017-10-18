@@ -17,6 +17,7 @@ import com.ejercicio.parqueadero.modelo.Vigilante;
 
 import persistencia.entidad.RegistroEntity;
 import persistencia.entidad.VehiculoEntity;
+import persistencia.repositorio.Parqueadero;
 import persistencia.repositorio.RegistroRepository;
 import persistencia.repositorio.VehiculoRepository;
 import org.springframework.http.HttpStatus;
@@ -29,81 +30,86 @@ public class RegistroController {
 	@Autowired
 	@Qualifier("registroJpaRepository")
 	RegistroRepository registroRepository;
-	
+
 	@Autowired
 	@Qualifier("vehiculoJpaRepository")
 	VehiculoRepository vehiculoRepository;
 
+	// consultar registros en BD con
+												// repository Registro y dar ese
+												// valor
 	Vigilante vigilante = new Vigilante();
 
 	// create
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void create(@RequestBody String idVehiculo) {
+	@RequestMapping(value = "/{idVehiculo}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void create(@PathVariable("idVehiculo") String idVehiculo, @RequestBody RegistroEntity registro) {
 		System.out.println("Entra a esta peticion Save registro");
 		
-		//VehiculoEntity vh = new VehiculoEntity();
-		VehiculoEntity vh = vehiculoRepository.findById("59e671dae9d9ce1e58efd34f");
-		//vh.setId("59e617fde9d9ce18f0cf79f7");
-		//vh.setPlaca("ADR567");
-		//vh.setTipo_carro("Automovil");
+		Parqueadero parqueadero = establecerParqueadero();
 		
-		RegistroEntity registro = new RegistroEntity();
-		registro.setVehiculo(vh);
+		VehiculoEntity vh = vehiculoRepository.findById(idVehiculo);
 
-		boolean aceptado = vigilante.validarPlaca(registro.getVehiculo().getPlaca());
+		boolean cupoLibre = vigilante.validarCupoLibre(parqueadero,vh.getTipo_vehiculo()); //verificar esta parte
 
-		if (aceptado) {
-			registro.setFecha_ingreso(new Date());
-			registroRepository.save(registro);
+		if(cupoLibre){
+			boolean placaAceptada = vigilante.validarPlaca(vh.getPlaca());
+			if (placaAceptada) {
+				registro.setVehiculo(vh);
+				registro.setFecha_ingreso(new Date());
+				registroRepository.save(registro);
+				vigilante.asignarCupoVehiculo(parqueadero,vh.getTipo_vehiculo());
+			}else{
+				System.out.println("Placa Invalida para este dia");
+			}
 		}else{
-			System.out.println("Placa Invalida");
+			System.out.println("No hay Cupo para " + vh.getTipo_vehiculo());
 		}
 	}
 
 	// read
-	@RequestMapping(value = "/{placa}")
-	public ResponseEntity<RegistroEntity> read(@PathVariable("placa") String placa) {
-		
+	@RequestMapping(value = "/{id}")
+	public ResponseEntity<RegistroEntity> read(@PathVariable("id") String id) {
+
 		System.out.println("Entra a esta peticion Read Registro");
 
-		RegistroEntity registro = registroRepository.findOne(placa);
-		
-		if(registro == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(registro, HttpStatus.OK);
-        }
-		
+		RegistroEntity registro = registroRepository.findOne(id);
+
+		if (registro == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(registro, HttpStatus.OK);
+		}
+
 	}
 
 	// read
 	@RequestMapping(value = "/all")
 	public List<RegistroEntity> readAll() {
 		System.out.println("Entra a esta peticion all Registro");
+
 		return registroRepository.findAll();
 	}
 
 	// update
-	@RequestMapping(value = "/salida/{placa}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void update(@PathVariable("placa") String placa) {
+	@RequestMapping(value = "/salida/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void update(@PathVariable("id") String id) {
+
 		System.out.println("Entra a esta peticion Update");
-	
-		RegistroEntity registro = registroRepository.findById(placa);
+
+		RegistroEntity registro = registroRepository.findById(id);
+
+		VehiculoEntity vehiculo = vehiculoRepository.findByPlaca(registro.getVehiculo().getPlaca());
 		
-		VehiculoEntity vehiculo = vehiculoRepository.findByPlaca(placa);
-		
-		//double adicional = vigilante.validarCc(vehiculo);
-		
+		double adicional = vigilante.validarCc(vehiculo);
+
 		registro.setFecha_salida(new Date());
-		
-		double valor = vigilante.calcularCosto(registro);
-		
-		//registro.setValor(valor + adicional);
-		registro.setValor(valor + 0);
-		
+
+		double valor = vigilante.calcularCosto(registro, vehiculo.getTipo_vehiculo());
+
+		registro.setValor(valor + adicional);
+
 		registroRepository.save(registro);
-		
-		
+
 	}
 
 	// delete
@@ -111,6 +117,30 @@ public class RegistroController {
 	public void delete(@PathVariable String id) {
 		System.out.println("Entra a esta peticion Delete");
 		registroRepository.delete(id);
+	}
+
+	public Parqueadero establecerParqueadero() {
+		
+		int cuposOcupadosMoto = 0;
+		int cuposOcupadosCarro = 0;
+		
+		List<RegistroEntity> listaRegistros = registroRepository.findAll();
+		
+		for (RegistroEntity registroEntity : listaRegistros) {
+			
+			if (registroEntity.getFecha_salida() == null){
+				
+				if(registroEntity.getVehiculo().getTipo_vehiculo().equals("carro")){
+					++cuposOcupadosCarro;
+				}else{
+					++cuposOcupadosMoto;
+				}
+			}
+		}
+		
+		Parqueadero parqueadero = new Parqueadero(Parqueadero.CUPOS_MAX_CARRO-cuposOcupadosCarro,Parqueadero.CUPOS_MAX_MOTO-cuposOcupadosMoto);
+		System.out.println("C: " + parqueadero.getCupos_disponibles_carro() + " - M :" + parqueadero.getCupos_disponibles_moto());
+		return parqueadero;
 	}
 
 }

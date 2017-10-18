@@ -1,74 +1,71 @@
 package persistencia.repositorio;
 
-import java.util.ArrayList;
-
-import com.ejercicio.parqueadero.modelo.Vehiculo;
 import com.ejercicio.parqueadero.repositorio.IParqueadero;
 
-public class Parqueadero implements IParqueadero{
+public class Parqueadero implements IParqueadero {
 
 	int cupos_disponibles_carro = 0;
 	int cupos_disponibles_moto = 0;
-	
 
-	public Parqueadero() {
-		this.cupos_disponibles_carro = CUPOS_MAX_CARRO;
-		this.cupos_disponibles_moto = CUPOS_MAX_MOTO;
+	public Parqueadero(int cupos_disponibles_carro, int cupos_disponibles_moto) {
+		this.cupos_disponibles_carro = cupos_disponibles_carro;
+		this.cupos_disponibles_moto = cupos_disponibles_moto;
 	}
-	
 
 	public int getCupos_disponibles_carro() {
 		return cupos_disponibles_carro;
 	}
 
-
 	public void setCupos_disponibles_carro(int cupos_disponibles_carro) {
 		this.cupos_disponibles_carro = cupos_disponibles_carro;
 	}
-
-
 
 	public int getCupos_disponibles_moto() {
 		return cupos_disponibles_moto;
 	}
 
-
-
 	public void setCupos_disponibles_moto(int cupos_disponibles_moto) {
 		this.cupos_disponibles_moto = cupos_disponibles_moto;
 	}
 
-
-
 	@Override
-	public ArrayList<Vehiculo> obtenerVehiculosParqueadero() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean agregarVehiculo(Parqueadero parqueadero, String tipo_vehiculo) {
+
+		if (tipo_vehiculo.equals("carro")) {
+			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_carro-1);
+			System.out.println("ingresado, cupos disp carro : "+parqueadero.cupos_disponibles_carro);
+			return true;
+		} else {
+			parqueadero.setCupos_disponibles_moto(parqueadero.cupos_disponibles_moto-1);
+			System.out.println("ingresado, cupos disp moto: "+parqueadero.cupos_disponibles_moto);
+
+			return true;
+		}
 	}
 
 	@Override
-	public void agregarVehiculo(Vehiculo vehiculo) {
-		// TODO Auto-generated method stub
+	public boolean retirarVehiculo(Parqueadero parqueadero, String tipo_vehiculo) {
+
+		if (tipo_vehiculo.equals("carro")) {
+			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_carro+1);
+			return true;
+		} else {
+			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_moto+1);
+			return true;
+		}
 	}
 
 	@Override
-	public void retirarVehiculo(Vehiculo vehiculo) {
-		// TODO Auto-generated method stub
-		
-	}
+	public boolean validarCupoLibre(Parqueadero parqueadero, String tipo_vehiculo) {
 
-	@Override
-	public boolean validarCupoLibre() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		if (tipo_vehiculo.equals("carro")) {
+			System.out.println("validar cupo carro dispo:" + parqueadero.getCupos_disponibles_carro());
+			return parqueadero.getCupos_disponibles_carro() > 0;
+		} else {
+			System.out.println("validar cupo moto dispo:" + parqueadero.getCupos_disponibles_moto());
+			return parqueadero.getCupos_disponibles_moto() > 0;
+		}
 
-	@Override
-	public Vehiculo obtenerVehiculoPorPlaca(String placa) {
-		// TODO Auto-generated method stub
-		return null;
 	}
-	
-	
 
 }

@@ -1,8 +1,6 @@
 package com.ejercicio.parqueadero.repositorio;
 
-import java.util.ArrayList;
-
-import com.ejercicio.parqueadero.modelo.Vehiculo;
+import persistencia.repositorio.Parqueadero;
 
 public interface IParqueadero {
 	
@@ -21,28 +19,28 @@ public interface IParqueadero {
 	 * @param
 	 * @return
 	 */
-	ArrayList<Vehiculo> obtenerVehiculosParqueadero();
+	//ArrayList<Vehiculo> obtenerVehiculosParqueadero();
 
 	
 	/**
 	 * Permite agregar un vehiculo al parqueadero
 	 * @param vehiculo
 	 */
-	void agregarVehiculo(Vehiculo vehiculo);
+	boolean agregarVehiculo(Parqueadero parqueadero, String tipo_vehiculo);
 	
 	
 	/**
 	 * Permite agregar un vehiculo al parqueadero
 	 * @param vehiculo
 	 */
-	void retirarVehiculo(Vehiculo vehiculo);
+	boolean retirarVehiculo(Parqueadero parqueadero, String tipo_vehiculo);
 	
 	
 	/**
-	 * Permite validar que hay cupo para moto en el parqueadero
+	 * Permite validar que hay cupo para moto o carro en el parqueadero
 	 * @param
 	 */
-	boolean validarCupoLibre();
+	boolean validarCupoLibre(Parqueadero parqueadero, String tipo_vehiculo);
 	
 	
 	/*/**
@@ -58,5 +56,5 @@ public interface IParqueadero {
 	 * Permite obtener un vehiculo apartir de la placa
 	 * @param
 	 */
-	Vehiculo obtenerVehiculoPorPlaca(String placa);
+	//Vehiculo obtenerVehiculoPorPlaca(String placa);
 }

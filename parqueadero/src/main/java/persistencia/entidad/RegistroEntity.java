@@ -41,7 +41,7 @@ public class RegistroEntity {
 		public void setFecha_ingreso(Date fecha_ingreso) {
 			this.fecha_ingreso = fecha_ingreso;
 		}
-
+		
 		public Date getFecha_salida() {
 			return fecha_salida;
 		}
@@ -49,7 +49,7 @@ public class RegistroEntity {
 		public void setFecha_salida(Date fecha_salida) {
 			this.fecha_salida = fecha_salida;
 		}
-		
+
 		public double getValor() {
 			return valor;
 		}
