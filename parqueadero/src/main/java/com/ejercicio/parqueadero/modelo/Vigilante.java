@@ -17,10 +17,7 @@ public class Vigilante {
 
 	DateFormat formatoHora = new SimpleDateFormat("HH:mm");
     DateFormat formatoFecha = new SimpleDateFormat("MM/dd/yyyy");
-    
-    Parqueadero parqueadero;
-
-
+ 
 	public Vigilante() {
 		
 	}
@@ -46,32 +43,11 @@ public class Vigilante {
 
 	public double cobrar(RegistroEntity registro, String tipo_vehiculo) {
 
-		Calendar calendarInicio = Calendar.getInstance();
-		Calendar calendarFin = Calendar.getInstance();
-		long milis1, milis2, diff;
-		
-		Date fechaSalida = new Date("10/23/2017 13:45"); //para ejemplo
-		
-		
-		calendarFin.setTime(fechaSalida);
-		
-		String fecha = formatoFecha.format(registro.getFecha_ingreso()) + " " + formatoHora.format(registro.getFecha_ingreso());
-		
-		Date fechaIngreso = new Date(fecha);
-		
-		calendarInicio.setTime(fechaIngreso);
-		
-		
-		milis1 = calendarInicio.getTimeInMillis();
-		 
-        milis2 = calendarFin.getTimeInMillis();
-
-        diff = milis2-milis1;
-        
-        //long minutos =  Math.abs (diff / (60 * 1000));
-        long horas =   (diff / (60 * 60 * 1000));
-        long dias = Math.abs ( diff / (24 * 60 * 60 * 1000) );
+		long tiempo [] = determinarTiempo(registro.getFecha_ingreso(), registro.getFecha_salida(), tipo_vehiculo);
   
+		long horas = tiempo[0];
+		long dias = tiempo[1];
+		
         horas -= dias * 24;
         
         if(tipo_vehiculo.equals("carro")){
@@ -80,51 +56,65 @@ public class Vigilante {
 	        	horas = 0;
 	        }
         }
-        
-        //minutos -= horas * 60 + (dias * 1440);
-    
 
 		double valor = determinarCostoTotal(tipo_vehiculo, dias, horas);
 		
 		return valor;
 	}
 	
+	public long[] determinarTiempo(Date fechaIngreso, Date fechaSalida, String tipo_vehiculo) {
+		
+		long fechaInicioMili, fechaFinMili, diferenciaMili;
+		
+		Calendar calendarInicio = Calendar.getInstance();
+		Calendar calendarFin = Calendar.getInstance();
+		
+		String fechaIngresoFormateada = formatoFecha.format(fechaIngreso) + " " + formatoHora.format(fechaIngreso);
+		String fechaSalidaFormateada = formatoFecha.format(fechaSalida) + " " + formatoHora.format(fechaSalida);
+
+		//fechaSalida = new Date("10/23/2017 23:45"); //para ejemplo
+		fechaSalida = new Date(fechaSalidaFormateada);
+		fechaIngreso = new Date(fechaIngresoFormateada);
+		
+		calendarInicio.setTime(fechaIngreso);
+		calendarFin.setTime(fechaSalida);
+		
+		fechaInicioMili = calendarInicio.getTimeInMillis();
+		fechaFinMili = calendarFin.getTimeInMillis();
+        diferenciaMili = fechaFinMili-fechaInicioMili;
+        
+        long horas =   (diferenciaMili / (60 * 60 * 1000));
+        long dias = Math.abs ( diferenciaMili / (24 * 60 * 60 * 1000) );
+		
+		long tiempo [] = {horas,dias}; 
+		
+		return tiempo;
+	}
+	
+	
 	public double determinarCostoTotal(String tipo_vehiculo, long dias, long horas) {
 
-		
 		double total = 0;	
 		
 		if(tipo_vehiculo.equals("carro")){
-			
-			/*if (minutos>30)
-				horas++;*/
-			
-			total = (dias * Parqueadero.VALOR_DIA_CARRO) + (horas * Parqueadero.VALOR_HORA_CARRO);  
-			
+			total = (dias * Parqueadero.VALOR_DIA_CARRO) + (horas * Parqueadero.VALOR_HORA_CARRO);  		
 		}else{
-			
-			/*if (minutos>30)
-				horas++;*/
-			
-			total = (dias * Parqueadero.VALOR_DIA_MOTO) + (horas * Parqueadero.VALOR_HORA_MOTO);
-			
+			total = (dias * Parqueadero.VALOR_DIA_MOTO) + (horas * Parqueadero.VALOR_HORA_MOTO);	
 		}
 		
 		System.out.println("tiempo a cobrar: dias " + dias + ", horas " + horas);
-
 		
 		return total;
 	}
 	
 	
 
-	public boolean validarPlaca(String placa){
+	public boolean validarPlaca(String placa, int dia){
 		
-		int dia = Calendar.DAY_OF_WEEK;
 		char primerLetraPlaca = placa.toUpperCase().charAt(0);
 		
 		if (primerLetraPlaca == 'A'){
-			if (dia != 2 | dia != 7){
+			if (dia != 2 || dia != 7){
 				return false;
 			}
 		}
@@ -133,6 +123,8 @@ public class Vigilante {
 		
 	}
 
+	
+	
 	public double validarCc(VehiculoEntity vehiculo) {
 		
 		if(vehiculo.getTipo_vehiculo().equals("moto")){

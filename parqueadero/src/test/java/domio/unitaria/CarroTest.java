@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import persistencia.entidad.VehiculoEntity;
-import testdatabuilder.VehiculoTestDataBuilder;
+import testdatabuilder.CarroTestDataBuilder;
 
-public class VehiculoTest {
+public class CarroTest {
 
 
 		private static final String ID = "1";
@@ -19,10 +19,10 @@ public class VehiculoTest {
 		private static final String TIPO_CARRO = "Automovil";
 
 		@Test
-		public void crearVehiculoTest() {
+		public void crearCarroTest() {
 			
 			// arrange
-			VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder().
+			CarroTestDataBuilder carroTestDataBuilder = new CarroTestDataBuilder().
 					conId(ID).
 					conPlaca(PLACA).
 					conColor(COLOR).
@@ -32,16 +32,16 @@ public class VehiculoTest {
 					conTipoCarro(TIPO_CARRO);
 
 			// act
-			VehiculoEntity vehiculo = vehiculoTestDataBuilder.build();
+			VehiculoEntity vehiculo = carroTestDataBuilder.build();
 
 			// assert
 			assertEquals(ID, vehiculo.getId());
 			assertEquals(PLACA, vehiculo.getPlaca());
 			assertEquals(COLOR, vehiculo.getColor());
 			assertEquals(CC, vehiculo.getCc());
-			assertEquals(PLACA, vehiculo.getTipo_vehiculo());
-			assertEquals(COLOR, vehiculo.getNumero_puertas());
-			assertEquals(CC, vehiculo.getTipo_carro());
+			assertEquals(TIPO_VEHICULO, vehiculo.getTipo_vehiculo());
+			assertEquals(NUMERO_PUERTAS, vehiculo.getNumero_puertas());
+			assertEquals(TIPO_CARRO, vehiculo.getTipo_carro());
 		}
 
 }

@@ -33,7 +33,7 @@ public class Parqueadero implements IParqueadero {
 
 		if (tipo_vehiculo.equals("carro")) {
 			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_carro-1);
-			System.out.println("ingresado, cupos disp. carro : "+parqueadero.cupos_disponibles_carro  + "\n" );
+			System.out.println("ingresado, cupos disp. carro: "+parqueadero.cupos_disponibles_carro  + "\n" );
 			return true;
 		} else {
 			parqueadero.setCupos_disponibles_moto(parqueadero.cupos_disponibles_moto-1);
@@ -62,10 +62,10 @@ public class Parqueadero implements IParqueadero {
 	public boolean validarCupoLibre(Parqueadero parqueadero, String tipo_vehiculo) {
 
 		if (tipo_vehiculo.equals("carro")) {
-			System.out.println("validar cupo carro dispo:" + parqueadero.getCupos_disponibles_carro());
+			System.out.println("cupos disp. carro:" + parqueadero.getCupos_disponibles_carro() + "\n");
 			return parqueadero.getCupos_disponibles_carro() > 0;
 		} else {
-			System.out.println("validar cupo moto dispo:" + parqueadero.getCupos_disponibles_moto());
+			System.out.println("cupos disp. moto:" + parqueadero.getCupos_disponibles_moto() + "\n");
 			return parqueadero.getCupos_disponibles_moto() > 0;
 		}
 

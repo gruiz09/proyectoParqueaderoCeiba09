@@ -12,7 +12,8 @@ import com.ejercicio.parqueadero.modelo.Vigilante;
 import persistencia.entidad.RegistroEntity;
 import persistencia.entidad.VehiculoEntity;
 import persistencia.repositorio.Parqueadero;
-import testdatabuilder.VehiculoTestDataBuilder;
+import testdatabuilder.CarroTestDataBuilder;
+import testdatabuilder.MotoTestDataBuilder;
 
 import org.junit.Test;
 
@@ -22,20 +23,53 @@ public class VigilanteTest {
 	
 	
 	@Test
-	public void validarPlaca(){
+	public void PlacaCarroRestringidaEnDiaPermitido(){
 		
 		//arrange
-		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		CarroTestDataBuilder carroTestDataBuilder = new CarroTestDataBuilder();
 		
-		VehiculoEntity vehiculo = vehiculoTestDataBuilder.conPlaca("TFD435").build();  
+		VehiculoEntity vehiculo = carroTestDataBuilder.conPlaca("ACR456").build(); 
 		
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		//Registro registro = mock(Registro.class);
+		Vigilante vigilante =  new Vigilante();
+		
+		//act
+		boolean placaValida = vigilante.validarPlaca(vehiculo.getPlaca(),3);
+
+		//assert
+		assertTrue(placaValida);
+		
+	}
+	
+	@Test
+	public void PlacaCarroRestringidaEnDiaNoPermitido(){
+		
+		//arrange
+		CarroTestDataBuilder vehiculoTestDataBuilder = new CarroTestDataBuilder();
+		
+		VehiculoEntity vehiculo = vehiculoTestDataBuilder.conPlaca("ACR456").build();  
 		
 		Vigilante vigilante = new Vigilante();
 		
 		//act
-		boolean placaValida = vigilante.validarPlaca(vehiculo.getPlaca());
+		boolean placaInvalida = vigilante.validarPlaca(vehiculo.getPlaca(),5);
+
+		//assert
+		assertFalse(placaInvalida);
+		
+	}
+	
+	@Test
+	public void PlacaValidaMoto(){
+		
+		//arrange
+		MotoTestDataBuilder motoTestDataBuilder = new MotoTestDataBuilder();
+		
+		VehiculoEntity vehiculo = motoTestDataBuilder.conPlaca("REC545").build();  
+		
+		Vigilante vigilante = mock(Vigilante.class);
+		
+		//act
+		boolean placaValida = vigilante.validarPlaca(vehiculo.getPlaca(),2);
 		
 		//assert
 		assertTrue(placaValida);
@@ -43,22 +77,18 @@ public class VigilanteTest {
 	}
 	
 	@Test
-	public void validarPlacaInvalida(){
+	public void PlacaInvalidaMoto(){
 		
 		//arrange
-		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		CarroTestDataBuilder vehiculoTestDataBuilder = new CarroTestDataBuilder();
 		
-		VehiculoEntity vehiculo = vehiculoTestDataBuilder.conPlaca("ACR456").build();  
+		VehiculoEntity vehiculo = vehiculoTestDataBuilder.conPlaca("OIK884").build();  
 		
-		Parqueadero parqueadero = mock(Parqueadero.class);
-		//Registro registro = mock(Registro.class);
-		
-		Vigilante vigilante = new Vigilante();
-		
+		Vigilante vigilante = mock(Vigilante.class);
 		
 		//act
-		boolean placaInvalida = vigilante.validarPlaca(vehiculo.getPlaca());
-		
+		boolean placaInvalida = vigilante.validarPlaca(vehiculo.getPlaca(),5);
+
 		//assert
 		assertFalse(placaInvalida);
 		
@@ -70,7 +100,7 @@ public class VigilanteTest {
 		
 		//arrange				
 		
-		VehiculoEntity vehiculo = new VehiculoTestDataBuilder().conPlaca("ASA534").
+		VehiculoEntity vehiculo = new CarroTestDataBuilder().conPlaca("ASA534").
 				conCC("230").conColor("azul").build();
 		
 		String tipo_vehiculo = "carro";
@@ -94,7 +124,7 @@ public class VigilanteTest {
 	public void retirarCupoVehiculo(){
 		
 		//arrange			
-		VehiculoEntity vehiculo = new VehiculoTestDataBuilder().conPlaca("ASA534").build();
+		VehiculoEntity vehiculo = new CarroTestDataBuilder().conPlaca("ASA534").build();
 		
 		Parqueadero parqueadero = mock(Parqueadero.class);
 		Registro registro = mock(Registro.class);
@@ -115,7 +145,7 @@ public class VigilanteTest {
 	public void calcularCosto(){
 		
 		//arrange
-		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		CarroTestDataBuilder vehiculoTestDataBuilder = new CarroTestDataBuilder();
 				
 		Parqueadero parqueadero = mock(Parqueadero.class);
 		RegistroEntity registro = mock(RegistroEntity.class);
@@ -134,6 +164,45 @@ public class VigilanteTest {
 		assertThat(valor);
 		
 	}
+	
+	@Test
+	public void validarCupoLibre(){
+		
+		
+
+	}
+	
+	@Test
+	public void cobrar(){
+		
+		
+
+	}
+	
+
+	@Test
+	public void determinarTiempo(){
+		
+		
+
+	}
+	
+	@Test
+	public void determinarCostoTotal(){
+		
+		
+
+	}
+	
+	@Test
+	public void validarCc(){
+		
+		
+
+	}
+	
+	
+	
 	
 
 }

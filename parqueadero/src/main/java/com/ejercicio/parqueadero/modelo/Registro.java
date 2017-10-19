@@ -1,11 +1,8 @@
 package com.ejercicio.parqueadero.modelo;
 
-import java.util.ArrayList;
 import java.util.Date;
 
-import com.ejercicio.parqueadero.repositorio.IRegistro;
-
-public class Registro implements IRegistro {
+public class Registro {
 	
 	private String id;
 	private Date fecha_ingreso;
@@ -77,23 +74,6 @@ public class Registro implements IRegistro {
 		this.vehiculo = vehiculo;
 	}
 
-	@Override
-	public ArrayList<Registro> obtenerRegistrosPorPlaca(String placa) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void agregar(Registro registro) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Registro obtener(String placa) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	
 }

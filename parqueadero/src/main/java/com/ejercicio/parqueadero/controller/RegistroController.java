@@ -1,5 +1,6 @@
 package com.ejercicio.parqueadero.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,18 +40,20 @@ public class RegistroController {
 	// create
 	@RequestMapping(value = "/{idVehiculo}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void create(@PathVariable("idVehiculo") String idVehiculo) {
-		System.out.println("Entra a esta peticion Save registro");
+		System.out.println("Save-Registro");
 		
 		RegistroEntity registro = new RegistroEntity();
 		
 		Parqueadero parqueadero = establecerParqueadero();
+		
+		int dia = Calendar.DAY_OF_WEEK;
 		
 		VehiculoEntity vh = vehiculoRepository.findById(idVehiculo);
 
 		boolean cupoLibre = vigilante.validarCupoLibre(parqueadero,vh.getTipo_vehiculo());
 
 		if(cupoLibre){
-			boolean placaAceptada = vigilante.validarPlaca(vh.getPlaca());
+			boolean placaAceptada = vigilante.validarPlaca(vh.getPlaca(),dia);
 			if (placaAceptada) {
 				registro.setVehiculo(vh);
 				registro.setFecha_ingreso(new Date());
@@ -68,7 +71,7 @@ public class RegistroController {
 	@RequestMapping(value = "/{id}")
 	public ResponseEntity<RegistroEntity> read(@PathVariable("id") String id) {
 
-		System.out.println("Entra a esta peticion Read Registro");
+		System.out.println("Read-Registro");
 
 		RegistroEntity registro = registroRepository.findOne(id);
 
@@ -92,9 +95,9 @@ public class RegistroController {
 	@RequestMapping(value = "/salida/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void update(@PathVariable("id") String id) {
 		
+		System.out.println("Update-Registro");
+		
 		Parqueadero parqueadero = establecerParqueadero();
-
-		System.out.println("Entra a esta peticion Update");
 
 		RegistroEntity registro = registroRepository.findById(id);
 
@@ -117,7 +120,7 @@ public class RegistroController {
 	// delete
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable String id) {
-		System.out.println("Entra a esta peticion Delete");
+		System.out.println("Delete-Registro");
 		registroRepository.delete(id);
 	}
 
@@ -141,8 +144,8 @@ public class RegistroController {
 		}
 		
 		Parqueadero parqueadero = new Parqueadero(Parqueadero.CUPOS_MAX_CARRO-cuposOcupadosCarro,Parqueadero.CUPOS_MAX_MOTO-cuposOcupadosMoto);
-		System.out.println("cupos disponibles Carro: " + parqueadero.getCupos_disponibles_carro() + 
-				" - cupos disponibles Moto :" + parqueadero.getCupos_disponibles_moto() + "\n" );
+		System.out.println("\ncupos disponibles Carro: " + parqueadero.getCupos_disponibles_carro() + 
+				"\ncupos disponibles Moto :" + parqueadero.getCupos_disponibles_moto() + "\n" );
 		return parqueadero;
 	}
 

@@ -9,7 +9,7 @@ public interface IParqueadero {
 	final int VALOR_HORA_MOTO = 500;
 	final int VALOR_DIA_CARRO = 8000;
 	final int VALOR_DIA_MOTO = 600;
-	final int VALOR_ADICIONAL_MOTO = 600;
+	final int VALOR_ADICIONAL_MOTO = 2000;
 	
 	final int CUPOS_MAX_CARRO = 20;
 	final int CUPOS_MAX_MOTO = 10;
