@@ -33,11 +33,11 @@ public class Parqueadero implements IParqueadero {
 
 		if (tipo_vehiculo.equals("carro")) {
 			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_carro-1);
-			System.out.println("ingresado, cupos disp carro : "+parqueadero.cupos_disponibles_carro);
+			System.out.println("ingresado, cupos disp. carro : "+parqueadero.cupos_disponibles_carro  + "\n" );
 			return true;
 		} else {
 			parqueadero.setCupos_disponibles_moto(parqueadero.cupos_disponibles_moto-1);
-			System.out.println("ingresado, cupos disp moto: "+parqueadero.cupos_disponibles_moto);
+			System.out.println("ingresado, cupos disp. moto: "+parqueadero.cupos_disponibles_moto  + "\n" );
 
 			return true;
 		}
@@ -48,9 +48,12 @@ public class Parqueadero implements IParqueadero {
 
 		if (tipo_vehiculo.equals("carro")) {
 			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_carro+1);
+			System.out.println("retirado, cupos disp. carro : "+parqueadero.cupos_disponibles_carro  + "\n" );
+
 			return true;
 		} else {
 			parqueadero.setCupos_disponibles_carro(parqueadero.cupos_disponibles_moto+1);
+			System.out.println("retirado, cupos disp. moto : "+parqueadero.cupos_disponibles_carro  + "\n" );
 			return true;
 		}
 	}

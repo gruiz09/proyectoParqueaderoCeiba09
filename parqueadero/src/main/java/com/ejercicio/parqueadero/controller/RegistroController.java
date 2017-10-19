@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ejercicio.parqueadero.modelo.Vigilante;
@@ -35,21 +33,21 @@ public class RegistroController {
 	@Qualifier("vehiculoJpaRepository")
 	VehiculoRepository vehiculoRepository;
 
-	// consultar registros en BD con
-												// repository Registro y dar ese
-												// valor
+	
 	Vigilante vigilante = new Vigilante();
 
 	// create
 	@RequestMapping(value = "/{idVehiculo}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void create(@PathVariable("idVehiculo") String idVehiculo, @RequestBody RegistroEntity registro) {
+	public void create(@PathVariable("idVehiculo") String idVehiculo) {
 		System.out.println("Entra a esta peticion Save registro");
+		
+		RegistroEntity registro = new RegistroEntity();
 		
 		Parqueadero parqueadero = establecerParqueadero();
 		
 		VehiculoEntity vh = vehiculoRepository.findById(idVehiculo);
 
-		boolean cupoLibre = vigilante.validarCupoLibre(parqueadero,vh.getTipo_vehiculo()); //verificar esta parte
+		boolean cupoLibre = vigilante.validarCupoLibre(parqueadero,vh.getTipo_vehiculo());
 
 		if(cupoLibre){
 			boolean placaAceptada = vigilante.validarPlaca(vh.getPlaca());
@@ -85,7 +83,7 @@ public class RegistroController {
 	// read
 	@RequestMapping(value = "/all")
 	public List<RegistroEntity> readAll() {
-		System.out.println("Entra a esta peticion all Registro");
+		System.out.println("Entra a esta peticion All Registro");
 
 		return registroRepository.findAll();
 	}
@@ -93,6 +91,8 @@ public class RegistroController {
 	// update
 	@RequestMapping(value = "/salida/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void update(@PathVariable("id") String id) {
+		
+		Parqueadero parqueadero = establecerParqueadero();
 
 		System.out.println("Entra a esta peticion Update");
 
@@ -109,6 +109,8 @@ public class RegistroController {
 		registro.setValor(valor + adicional);
 
 		registroRepository.save(registro);
+		
+		vigilante.retirarCupoVehiculo(parqueadero,vehiculo.getTipo_vehiculo());
 
 	}
 
@@ -139,7 +141,8 @@ public class RegistroController {
 		}
 		
 		Parqueadero parqueadero = new Parqueadero(Parqueadero.CUPOS_MAX_CARRO-cuposOcupadosCarro,Parqueadero.CUPOS_MAX_MOTO-cuposOcupadosMoto);
-		System.out.println("C: " + parqueadero.getCupos_disponibles_carro() + " - M :" + parqueadero.getCupos_disponibles_moto());
+		System.out.println("cupos disponibles Carro: " + parqueadero.getCupos_disponibles_carro() + 
+				" - cupos disponibles Moto :" + parqueadero.getCupos_disponibles_moto() + "\n" );
 		return parqueadero;
 	}
 
