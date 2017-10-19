@@ -104,7 +104,7 @@ public class RegistroController {
 
 		registro.setFecha_salida(new Date());
 
-		double valor = vigilante.calcularCosto(registro, vehiculo.getTipo_vehiculo());
+		double valor = vigilante.cobrar(registro, vehiculo.getTipo_vehiculo());
 
 		registro.setValor(valor + adicional);
 

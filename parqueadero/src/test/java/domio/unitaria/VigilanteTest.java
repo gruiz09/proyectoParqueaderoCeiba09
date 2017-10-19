@@ -128,7 +128,7 @@ public class VigilanteTest {
 		//when(registro.obtener(vehiculo.getPlaca())).thenReturn(registro);
 
 		//act
-		double valor =vigilante.calcularCosto(registro,tipo_vehiculo);
+		double valor =vigilante.cobrar(registro,tipo_vehiculo);
 		
 		//assert
 		assertThat(valor);

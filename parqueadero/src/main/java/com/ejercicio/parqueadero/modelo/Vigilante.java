@@ -44,13 +44,13 @@ public class Vigilante {
 	}
 	
 
-	public double calcularCosto(RegistroEntity registro, String tipo_vehiculo) {
+	public double cobrar(RegistroEntity registro, String tipo_vehiculo) {
 
 		Calendar calendarInicio = Calendar.getInstance();
 		Calendar calendarFin = Calendar.getInstance();
 		long milis1, milis2, diff;
 		
-		Date fechaSalida = new Date("10/23/2017 22:45"); //para ejemplo
+		Date fechaSalida = new Date("10/23/2017 13:45"); //para ejemplo
 		
 		
 		calendarFin.setTime(fechaSalida);
@@ -68,42 +68,49 @@ public class Vigilante {
 
         diff = milis2-milis1;
         
-        long minutos =  Math.abs (diff / (60 * 1000));
+        //long minutos =  Math.abs (diff / (60 * 1000));
         long horas =   (diff / (60 * 60 * 1000));
         long dias = Math.abs ( diff / (24 * 60 * 60 * 1000) );
   
-        
         horas -= dias * 24;
-        minutos -= horas * 60 + (dias * 1440);
+        
+        if(tipo_vehiculo.equals("carro")){
+	        if(horas >= 9){
+	        	++dias;
+	        	horas = 0;
+	        }
+        }
+        
+        //minutos -= horas * 60 + (dias * 1440);
     
 
-		double valor = determinarCostoTotal(tipo_vehiculo, dias, horas, minutos);
+		double valor = determinarCostoTotal(tipo_vehiculo, dias, horas);
 		
 		return valor;
 	}
 	
-	public double determinarCostoTotal(String tipo_vehiculo, long dias, long horas, long minutos) {
+	public double determinarCostoTotal(String tipo_vehiculo, long dias, long horas) {
 
 		
 		double total = 0;	
 		
 		if(tipo_vehiculo.equals("carro")){
 			
-			if (minutos>30)
-				horas++;
+			/*if (minutos>30)
+				horas++;*/
 			
 			total = (dias * Parqueadero.VALOR_DIA_CARRO) + (horas * Parqueadero.VALOR_HORA_CARRO);  
 			
 		}else{
 			
-			if (minutos>30)
-				horas++;
+			/*if (minutos>30)
+				horas++;*/
 			
 			total = (dias * Parqueadero.VALOR_DIA_MOTO) + (horas * Parqueadero.VALOR_HORA_MOTO);
 			
 		}
 		
-		System.out.println("tiempo a cobrar: dias " + dias + ", horas " + horas + ", minutos "+ minutos);
+		System.out.println("tiempo a cobrar: dias " + dias + ", horas " + horas);
 
 		
 		return total;
