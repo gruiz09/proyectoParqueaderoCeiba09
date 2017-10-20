@@ -114,7 +114,7 @@ public class Vigilante {
 		char primerLetraPlaca = placa.toUpperCase().charAt(0);
 		
 		if (primerLetraPlaca == 'A'){
-			if (dia != 2 || dia != 7){
+			if (!(dia == 2 || dia == 7)){
 				return false;
 			}
 		}
